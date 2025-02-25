@@ -34,8 +34,8 @@ const currentTransactions = account?.transactions.slice(
     <div className="transactions">
       <div className="transactions-header">
         <HeaderBox 
-          title="Transaction History"
-          subtext="See your bank details and transactions."
+          title="Receipt History"
+          subtext="See your past scanned receipts."
         />
       </div>
 
