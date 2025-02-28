@@ -10,6 +10,11 @@ export const sidebarLinks = [
     label: "My Banks",
   },
   {
+    imgURL: "/icons/deposit.svg",
+    route: "/goal-setting",
+    label: "Goal Setting",
+  },
+  {
     imgURL: "/icons/transaction.svg",
     route: "/transaction-history",
     label: "Receipt History",
