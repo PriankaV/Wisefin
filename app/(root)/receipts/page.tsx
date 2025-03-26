@@ -5,12 +5,12 @@ import { createAdminClient } from "@/lib/appwrite";
 
 const ReceiptsPage = () => {
   const [receipts, setReceipts] = useState<any[]>([]);
-  const { database } = createAdminClient();
 
   useEffect(() => {
     const fetchReceipts = async () => {
       try {
-        const response = await database.listDocuments(
+        const adminClient = await createAdminClient(); 
+        const response = await adminClient.database.listDocuments(
           process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
           "receiptsCollection"
         );
@@ -20,7 +20,7 @@ const ReceiptsPage = () => {
       }
     };
     fetchReceipts();
-  }, [database]);
+  }, []);
 
   return (
     <div className="receipts-page p-4">
