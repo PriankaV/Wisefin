@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import HeaderBox from "@/components/HeaderBox";
 
 const SettingsPage = () => {
@@ -19,6 +19,16 @@ const SettingsPage = () => {
   const [securityCheckbox, setSecurityCheckbox] = useState(false);
   const [themeCheckbox, setThemeCheckbox] = useState(false);
   const [accountSettingsCheckbox, setAccountSettingsCheckbox] = useState(false);
+
+  useEffect(() => {
+    if (theme === "Dark") {
+      document.documentElement.classList.add("dark");
+      document.body.classList.add("bg-gray-900", "text-white");
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.body.classList.remove("bg-gray-900", "text-white");
+    }
+  }, [theme]);
 
   return (
     <section className="p-8 space-y-8">
@@ -120,15 +130,6 @@ const SettingsPage = () => {
             </select>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <input
-              type="checkbox"
-              checked={themeCheckbox}
-              onChange={() => setThemeCheckbox(!themeCheckbox)}
-              className="w-5 h-5 text-teal-500"
-            />
-            <label className="text-sm font-medium text-gray-600">Enable Dark Theme</label>
-          </div>
 
           <div className="flex items-center space-x-3">
             <input
