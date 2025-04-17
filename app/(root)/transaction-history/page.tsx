@@ -18,14 +18,63 @@ const TransactionHistory = async ({ searchParams: { id, page }}: SearchParamProp
   const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
   const account = await getAccount({ appwriteItemId });
 
+  // Hardcoded transaction data
+  const hardcodedTransactions = [
+    {
+      id: 'txn_001',
+      name: 'Grocery Store Purchase',
+      amount: 45.23,
+      status: 'Completed',
+      date: '2025-04-15',
+      channel: 'Debit Card',
+      category: 'Groceries',
+    },
+    {
+      id: 'txn_002',
+      name: 'Online Subscription',
+      amount: 12.99,
+      status: 'Completed',
+      date: '2025-04-14',
+      channel: 'Online',
+      category: 'Entertainment',
+    },
+    {
+      id: 'txn_003',
+      name: 'Utility Bill Payment',
+      amount: 75.00,
+      status: 'Pending',
+      date: '2025-04-13',
+      channel: 'ACH',
+      category: 'Utilities',
+    },
+    {
+      id: 'txn_004',
+      name: 'Coffee Shop',
+      amount: 5.50,
+      status: 'Completed',
+      date: '2025-04-12',
+      channel: 'Debit Card',
+      category: 'Dining',
+    },
+    {
+      id: 'txn_005',
+      name: 'Gas Station',
+      amount: 30.00,
+      status: 'Completed',
+      date: '2025-04-11',
+      channel: 'Debit Card',
+      category: 'Transportation',
+    },
+  ];
+
   const rowsPerPage = 10;
-  const totalPages = Math.ceil(account?.transactions.length / rowsPerPage);
+  const totalPages = Math.ceil(hardcodedTransactions.length / rowsPerPage);
 
   const indexOfLastTransaction = currentPage * rowsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage;
 
-  const currentTransactions = account?.transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
-  const receiptTransactions = account?.receipts || []; // Ensure you fetch receipts from Appwrite
+  const currentTransactions = hardcodedTransactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+  const receiptTransactions = account?.receipts || []; // Keep this as is for receipts
 
   return (
     <div className="transactions">
