@@ -39,3 +39,6 @@ npm run dev
 🔹 Dark Mode Support
 🔹 Voice Assistant Integration
 🔹 Investment Tracking
+
+
+** My Part!
