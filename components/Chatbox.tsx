@@ -3,6 +3,55 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 
+// Hardcoded transaction data (same as used in Home.jsx and TransactionHistory.jsx)
+const hardcodedTransactions = [
+  {
+    id: "txn_001",
+    name: "Grocery Store Purchase",
+    amount: 45.23,
+    status: "Completed",
+    date: "2025-04-15",
+    channel: "Debit Card",
+    category: "Groceries",
+  },
+  {
+    id: "txn_002",
+    name: "Online Subscription",
+    amount: 12.99,
+    status: "Completed",
+    date: "2025-04-14",
+    channel: "Online",
+    category: "Entertainment",
+  },
+  {
+    id: "txn_003",
+    name: "Utility Bill Payment",
+    amount: 75.00,
+    status: "Pending",
+    date: "2025-04-13",
+    channel: "ACH",
+    category: "Utilities",
+  },
+  {
+    id: "txn_004",
+    name: "Coffee Shop",
+    amount: 5.50,
+    status: "Completed",
+    date: "2025-04-12",
+    channel: "Debit Card",
+    category: "Dining",
+  },
+  {
+    id: "txn_005",
+    name: "Gas Station",
+    amount: 30.00,
+    status: "Completed",
+    date: "2025-04-11",
+    channel: "Debit Card",
+    category: "Transportation",
+  },
+];
+
 const Chatbox = () => {
   const [messages, setMessages] = useState<{ text: string; sender: "user" | "bot" }[]>([]);
   const [input, setInput] = useState("");
@@ -11,14 +60,82 @@ const Chatbox = () => {
     if (!input.trim()) return;
     const userMessage = { text: input, sender: "user" };
     setMessages([...messages, userMessage]);
-
     setInput("");
 
-    // Simulated AI response
+    // Process the message and generate a bot response
     setTimeout(() => {
-      const botResponse = { text: "Hello! How can I assist you?", sender: "bot" };
+      const botResponse = processMessage(userMessage.text);
       setMessages((prevMessages) => [...prevMessages, botResponse]);
     }, 1000);
+  };
+
+  const processMessage = (message: string) => {
+    const lowerMessage = message.toLowerCase();
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // 0-based index
+    const currentYear = currentDate.getFullYear(); // 2025
+
+    // Helper function to calculate spending for a given category
+    const calculateSpending = (category: string) => {
+      return hardcodedTransactions
+        .filter((txn) => {
+          const txnDate = new Date(txn.date);
+          return (
+            txn.category.toLowerCase() === category.toLowerCase() &&
+            txnDate.getMonth() + 1 === currentMonth &&
+            txnDate.getFullYear() === currentYear &&
+            txn.status === "Completed"
+          );
+        })
+        .reduce((total, txn) => total + txn.amount, 0);
+    };
+
+    // Check for specific spending queries
+    if (lowerMessage.includes("how much did i spend on online subscription this month")) {
+      const spending = calculateSpending("Entertainment");
+      return {
+        text: spending > 0
+          ? `You spent $${spending.toFixed(2)} on Online Subscriptions this month (April 2025).`
+          : "You haven't spent any money on Online Subscriptions this month based on the available data.",
+        sender: "bot",
+      };
+    }
+
+    if (lowerMessage.includes("how much did i spend on gas this month")) {
+      const spending = calculateSpending("Transportation");
+      return {
+        text: spending > 0
+          ? `You spent $${spending.toFixed(2)} on gas this month (April 2025).`
+          : "You haven't spent any money on gas this month based on the available data.",
+        sender: "bot",
+      };
+    }
+
+    if (lowerMessage.includes("how much did i spend on grocery this month")) {
+      const spending = calculateSpending("Groceries");
+      return {
+        text: spending > 0
+          ? `You spent $${spending.toFixed(2)} on groceries this month (April 2025).`
+          : "You haven't spent any money on groceries this month based on the available data.",
+        sender: "bot",
+      };
+    }
+
+    if (lowerMessage.includes("how much did i spend on coffee this month")) {
+      const spending = calculateSpending("Dining"); // Assuming "Coffee Shop" falls under "Dining"
+      return {
+        text: spending > 0
+          ? `You spent $${spending.toFixed(2)} on coffee this month (April 2025).`
+          : "You haven't spent any money on coffee this month based on the available data.",
+        sender: "bot",
+      };
+    }
+
+    // Default response for other messages
+    return {
+      text: "Hello! How can I assist you? I can help with questions like 'How much did I spend on [category] this month?' (e.g., Online Subscription, gas, grocery, coffee).",
+      sender: "bot",
+    };
   };
 
   return (
@@ -57,4 +174,3 @@ const Chatbox = () => {
 };
 
 export default Chatbox;
-
